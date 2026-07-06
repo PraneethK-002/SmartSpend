@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -41,13 +42,13 @@ app.use('/api/budgets', budgetRoutes);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static assets in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, './src'))); // (Wait, we can serve frontend/dist)
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
+// Serve static assets in production if frontend build is present on disk
+const distPath = path.resolve(__dirname, '../frontend/dist');
+if (process.env.NODE_ENV === 'production' && fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
 
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../frontend/dist/index.html'));
+    res.sendFile(path.join(distPath, 'index.html'));
   });
 } else {
   // Base Endpoint
