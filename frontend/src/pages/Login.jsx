@@ -16,9 +16,13 @@ const Login = () => {
   }, [token, navigate]);
 
   const handleGoogleLogin = () => {
-    const backendUrl = import.meta.env.VITE_API_URL ? 
-      import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000';
-    window.location.href = `${backendUrl}/api/auth/google`;
+    let backendUrl = 'http://localhost:5000';
+    if (import.meta.env.VITE_API_URL) {
+      const cleanApiUrl = import.meta.env.VITE_API_URL.replace(/\/$/, '');
+      backendUrl = cleanApiUrl.replace('/api', '');
+    }
+    const targetUrl = `${backendUrl}/api/auth/google`.replace(/([^:]\/)\/+/g, '$1');
+    window.location.href = targetUrl;
   };
 
   return (
