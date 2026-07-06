@@ -14,8 +14,7 @@ import gmailRoutes from './src/routes/gmailRoutes.js';
 import transactionRoutes from './src/routes/transactionRoutes.js';
 import budgetRoutes from './src/routes/budgetRoutes.js';
 
-const dotenvResult = dotenv.config({ override: true });
-console.log('DEBUG: dotenvResult is:', dotenvResult);
+dotenv.config({ override: true });
 
 // Connect to Database
 connectDB();
